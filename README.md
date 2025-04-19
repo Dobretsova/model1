@@ -52,8 +52,11 @@
     </style>
 </head>
 <body>
+
 <h2>Прогноз поздних преждевременных спонтанных родов</h2>
+
 <form id="calculatorForm">
+
     <label for="indicator1">
         Отягощённый акушерско-гинекологический анамнез  
         <br><small>(преждевременные роды в анамнезе, поздний выкидыш в анамнезе)</small>
@@ -62,6 +65,7 @@
         <option value="0">0 – Нет</option>
         <option value="1">1 – Да</option>
     </select>
+
     <label for="indicator2">
         Дефект шейки матки  
         <br><small>(истмико-цервикальная недостаточность в предыдущую беременность, разрыв шейки матки в анамнезе, два и более инструментальных расширения цервикального канала в анамнезе, конизация или расширенная эксцизия шейки матки в анамнезе, лазерная вапоризация шейки матки в анамнезе)</small>
@@ -70,6 +74,7 @@
         <option value="0">0 – Нет</option>
         <option value="1">1 – Да</option>
     </select>
+
     <label for="indicator3">
         Инфекционно-воспалительные заболевания и дисбиотические состояния при настоящей беременности  
         <br><small>(рецидивирующий бактериальный вагиноз, острый вагинит, цервицит, инфекции мочевыводящих путей, бессимптомная бактериурия)</small>
@@ -78,26 +83,34 @@
         <option value="0">0 – Нет</option>
         <option value="1">1 – Да</option>
     </select>
+
     <label for="indicator4">
         Количество лейкоцитов в микроскопическом исследовании отделяемого из цервикального канала  
         <br><small>(в поле зрения, в I триместре настоящей беременности)</small>
     </label>
     <input type="number" id="indicator4" step="0.01" min="0" required>
+
     <button type="button" onclick="calculate()">Рассчитать</button>
 </form>
+
 <div id="result"></div>
+
 <script>
     function calculate() {
         const indicator1 = parseFloat(document.getElementById("indicator1").value);
         const indicator2 = parseFloat(document.getElementById("indicator2").value);
         const indicator3 = parseFloat(document.getElementById("indicator3").value);
         const indicator4 = parseFloat(document.getElementById("indicator4").value);
+
         const z = (-3.601) + (1.044 * indicator1) + (1.502 * indicator2) + (0.581 * indicator3) + (0.217 * indicator4);
-        const P = 1 / (1 + Math.exp(-z)) * 100%;
+        const P = 1 / (1 + Math.exp(-z)) * 100;
+
         const riskLevel = (P > 41.3) ? "Высокий риск" : "Низкий риск";
+
         const resultText = `Вероятность: ${P.toFixed(2)}%<br>Результат: <strong>${riskLevel}</strong>`;
         document.getElementById("result").innerHTML = resultText;
     }
 </script>
+
 </body>
 </html>
