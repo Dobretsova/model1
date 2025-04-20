@@ -1,61 +1,117 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-  <title>Калькулятор гестационного сахарного диабета</title>
-  <style>
-    /* стили для интерфейса */
-  </style>
+    <meta charset="UTF-8">
+    <title>Калькулятор прогноза поздних преждевременных спонтанных родов</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 720px;
+            margin: 40px auto;
+            padding: 25px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        h2 {
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        select, input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+        button {
+            margin-top: 30px;
+            padding: 12px;
+            width: 100%;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 30px;
+            font-weight: bold;
+            font-size: 18px;
+            text-align: center;
+            padding: 10px;
+            background-color: #eef;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
-  <h1>Калькулятор гестационного сахарного диабета</h1>
-  <form>
-    <label>Концентрация аланина:</label>
-    <input type="number" id="alanine" value="1">
-    <br>
-    <label>Концентрация аспаргина:</label>
-    <input type="number" id="asparagine" value="1">
-    <br>
-    <label>Концентрация аспаргиновой кислоты:</label>
-    <input type="number" id="aspartic_acid" value="1">
-    <br>
-    <label>Концентрация глицина:</label>
-    <input type="number" id="glycine" value="1">
-    <br>
-    <label>Концентрация глутамина:</label>
-    <input type="number" id="glutamine" value="1">
-    <br>
-    <label>Концентрация глутаминовой кислоты:</label>
-    <input type="number" id="glutamic_acid" value="1">
-    <br>
-    <button id="calculate">Рассчитать</button>
-    <p id="result"></p>
-  </form>
-  <script>
-    // функция для расчета риска гестационного сахарного диабета
-    function calculateGSDRisk(alanine, asparagine, aspartic_acid, glycine, glutamine, glutamic_acid) {
-      var z = 288.780 + (1.326 * alanine) - (235.461 * aspartic_acid) - (14.813 * asparagine) - (4.032 * glycine) + (41.517 * glutamine) + (72.569 * glutamic_acid);
-      var p = 1 / (1 + Math.exp(-z)) * 100;
-      return p;
+
+<h2>Прогноз поздних преждевременных спонтанных родов</h2>
+
+<form id="calculatorForm">
+
+    <label for="indicator1">
+        Отягощённый акушерско-гинекологический анамнез  
+        <br><small>(преждевременные роды в анамнезе, поздний выкидыш в анамнезе)</small>
+    </label>
+    <select id="indicator1" required>
+        <option value="0">0 – Нет</option>
+        <option value="1">1 – Да</option>
+    </select>
+
+    <label for="indicator2">
+        Дефект шейки матки  
+        <br><small>(истмико-цервикальная недостаточность в предыдущую беременность, разрыв шейки матки в анамнезе, два и более инструментальных расширения цервикального канала в анамнезе, конизация или расширенная эксцизия шейки матки в анамнезе, лазерная вапоризация шейки матки в анамнезе)</small>
+    </label>
+    <select id="indicator2" required>
+        <option value="0">0 – Нет</option>
+        <option value="1">1 – Да</option>
+    </select>
+
+    <label for="indicator3">
+        Инфекционно-воспалительные заболевания и дисбиотические состояния при настоящей беременности  
+        <br><small>(рецидивирующий бактериальный вагиноз, острый вагинит, цервицит, инфекции мочевыводящих путей, бессимптомная бактериурия)</small>
+    </label>
+    <select id="indicator3" required>
+        <option value="0">0 – Нет</option>
+        <option value="1">1 – Да</option>
+    </select>
+
+    <label for="indicator4">
+        Количество лейкоцитов в микроскопическом исследовании отделяемого из цервикального канала  
+        <br><small>(в поле зрения, в I триместре настоящей беременности)</small>
+    </label>
+    <input type="number" id="indicator4" step="0.01" min="0" required>
+
+    <button type="button" onclick="calculate()">Рассчитать</button>
+</form>
+
+<div id="result"></div>
+
+<script>
+    function calculate() {
+        const indicator1 = parseFloat(document.getElementById("indicator1").value);
+        const indicator2 = parseFloat(document.getElementById("indicator2").value);
+        const indicator3 = parseFloat(document.getElementById("indicator3").value);
+        const indicator4 = parseFloat(document.getElementById("indicator4").value);
+
+        const z = (-3.601) + (1.044 * indicator1) + (1.502 * indicator2) + (0.581 * indicator3) + (0.217 * indicator4);
+        const P = 1 / (1 + Math.exp(-z)) * 100;
+
+        const riskLevel = (P > 41.3) ? "Высокий риск" : "Низкий риск";
+
+        const resultText = `Вероятность: ${P.toFixed(2)}%<br>Результат: <strong>${riskLevel}</strong>`;
+        document.getElementById("result").innerHTML = resultText;
     }
-    // функция для вывода результата
-    function showResult(p) {
-      if (p <= 0.557) {
-        document.getElementById("result").innerHTML = "Высокий риск";
-      } else {
-        document.getElementById("result").innerHTML = "Низкий риск";
-      }
-    }
-    // обработчик события для кнопки "Рассчитать"
-    document.getElementById("calculate").addEventListener("click", function() {
-      var alanine = parseFloat(document.getElementById("alanine").value);
-      var asparagine = parseFloat(document.getElementById("asparagine").value);
-      var aspartic_acid = parseFloat(document.getElementById("aspartic_acid").value);
-      var glycine = parseFloat(document.getElementById("glycine").value);
-      var glutamine = parseFloat(document.getElementById("glutamine").value);
-      var glutamic_acid = parseFloat(document.getElementById("glutamic_acid").value);
-      var p = calculateGSDRisk(alanine, asparagine, aspartic_acid, glycine, glutamine, glutamic_acid);
-      showResult(p);
-    });
-  </script>
+</script>
+
 </body>
 </html>
