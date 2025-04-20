@@ -30,7 +30,6 @@
     <button id="calculate">Рассчитать</button>
     <p id="result"></p>
   </form>
-
   <script>
     // функция для расчета риска гестационного сахарного диабета
     function calculateGSDRisk(alanine, asparagine, aspartic_acid, glycine, glutamine, glutamic_acid) {
@@ -38,7 +37,6 @@
       var p = 1 / (1 + Math.exp(-z)) * 100;
       return p;
     }
-
     // функция для вывода результата
     function showResult(p) {
       if (p <= 0.557) {
@@ -47,7 +45,6 @@
         document.getElementById("result").innerHTML = "Низкий риск";
       }
     }
-
     // обработчик события для кнопки "Рассчитать"
     document.getElementById("calculate").addEventListener("click", function() {
       var alanine = parseFloat(document.getElementById("alanine").value);
@@ -56,7 +53,6 @@
       var glycine = parseFloat(document.getElementById("glycine").value);
       var glutamine = parseFloat(document.getElementById("glutamine").value);
       var glutamic_acid = parseFloat(document.getElementById("glutamic_acid").value);
-
       var p = calculateGSDRisk(alanine, asparagine, aspartic_acid, glycine, glutamine, glutamic_acid);
       showResult(p);
     });
